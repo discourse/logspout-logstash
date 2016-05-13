@@ -55,6 +55,7 @@ func (a *LogstashAdapter) Stream(logstream chan *router.Message) {
 			msg := LogstashMessage{
 				Message: m.Data,
 				Docker:  dockerInfo,
+				Stream:  m.Source,
 			}
 			js, err = json.Marshal(msg)
 			if err != nil {
@@ -64,6 +65,7 @@ func (a *LogstashAdapter) Stream(logstream chan *router.Message) {
 		} else {
 			// the message is already in JSON just add the docker specific fields as a nested structure
 			jsonMsg["docker"] = dockerInfo
+			jsonMsg["stream"] = m.Source
 
 			js, err = json.Marshal(jsonMsg)
 			if err != nil {
